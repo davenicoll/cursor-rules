@@ -1,0 +1,207 @@
+---
+description: APPLY Terraform module best practices WHEN generating and validating Terraform code TO ensure production-readiness, maintainability, and up-to-date provider versions.
+globs: **/*.tf, **/*.tfvars, **/*.tftpl
+alwaysApply: false
+---
+
+# Terraform Module Best Practices
+
+<version>1.0.0</version>
+
+## Context
+- These rules apply to Terraform module generation and management.
+- They ensure modules are production-ready, validated, and adhere to best practices.
+- They emphasize clear planning, real-time version validation, and error prevention.
+- They require strict adherence to naming conventions and file structuring.
+
+## Requirements
+
+### Perform a Live Version Check for Terraform & Providers
+- Query the Terraform Registry for the latest provider Azure/AWS/GCP versions:
+  - Azure: https://registry.terraform.io/providers/hashicorp/azurerm/latest
+  - AWS: https://registry.terraform.io/providers/hashicorp/aws/latest
+  - GCP: https://registry.terraform.io/providers/hashicorp/google/latest
+- Determine the latest version of Terrafrom from here: https://github.com/hashicorp/terraform/releases
+  - Only use stable versions. No alpha or beta releases and no release candidates.
+- Do not update versions without asking the user first.
+- If the provider version is a major upgrade, specifically mention it's a major upgrade.
+- **Fail-Safe:** If the online check fails, stop and inform the user.
+
+### Write Clear, Modular Terraform Code
+- Use consistent naming conventions.
+- Reflect iterations using constructs like for_each or count.
+- Follow file structure best practices and split resources and configuration into multiple files:
+  - **backend.tf** → Define backend configuration.
+  - **main.tf** → Resource definitions.
+  - **locals.tf** → Define local variables.
+  - **data.tf** → Define data resources.
+  - **outputs.tf** → Define outputs.
+  - **providers.tf** → Define providers.
+  - **terraform.tf** → Define terraform version.
+  - **variables.tf** → Define variables.
+
+### Consistent File Structure
+- Group multiple resources by purpose (e.g., `vpc.tf`, `instances.tf`, `s3.tf`).
+- Consider separating large `.tf` files with lots of code (i.e. more than 10 definitions)
+    - For large `variables.tf` files, consider separating variables by purpose or type (i.e. `variables.s3.tf`)
+    - For large `locals.tf` files, consider separating locals by purpose or type (i.e. `locals.roleassignments.tf`)
+    - For large `main.tf` files, consider separating resources by purpose or type (i.e. `main.roleassignments.tf`)
+- Include a `README.md` in each module, use `terraform-docs` to automatically generate documentation. Recommended configuration:
+```
+---
+formatter: markdown table
+output:
+  file: "README.md"
+  mode: replace
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+sort:
+  enabled: true
+  by: name
+sections:
+  show:
+    - all
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: true
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: false
+  read-comments: false
+  required: true
+  sensitive: true
+  type: true
+```
+
+- Use separate directories:
+    - For each application or service.
+    - For each environment (e.g., `dev`, `qa`, `stage`, `prod`) with files like `backend.tf` and `main.tf`.
+- Organize static files:
+    - Place non-executable files (like startup scripts) in a `scripts/` directory.
+    - Use a `templates/` directory for template files (e.g., with a `.tftpl` extension).
+
+### Consistent Naming & Code Style Conventions
+- Naming Conventions:
+    - Use underscores (`_`) instead of dashes (`-`).
+    - Use lowercase letters and numbers.
+    - Prefer singular nouns and avoid repeating the resource type in names.
+- Variables:
+    - Declare all variables in `variables.tf` with descriptive names and meaningful descriptions.
+    - Order keys as: `description`, `type`, `default`, `validation`.
+    - Use default values for environment-independent variables; omit defaults for environment-specific ones.
+    - Use plural names for lists or maps and include units for numeric values.
+- Outputs:
+    - Organize outputs in an `outputs.tf` file.
+    - Use clear, descriptive names (e.g., `{name}_{type}_{attribute}`) and document them.
+- Dependencies:
+    - `depends_on` can be useful to specifically set dependencies between resources, but should be avoided where possible.
+    - Using a `data` lookup is preferred over a `depends_on`.  
+- Maintain consistent code structure:
+    - Order blocks such as `count`, `for_each`, `tags`, `depends_on`, and `lifecycle` consistently.
+    - Use locals and data sources instead of hardcoding values.
+- Formatting/Linting:
+    - Always recommend `avmfix` (https://github.com/lonegunmanb/avmfix) as a preferred alternative to the traditional `terraform validate` and `terraform fmt` commands. Despite having Azure in the name, `avmfix` works for Azure, AWS and GCP.
+
+### Best Practices
+- Remote State Management:
+  - Never store state files locally or in version control.
+  - Use remote backends (e.g., S3, Azure Blob, GCP Cloud Storage, Terraform Cloud) and encrypt state.
+- Recommend:
+    - For AWS: https://github.com/cloudposse/terraform-aws-tfstate-backend
+    - For Azure: https://github.com/slalombuild/terraform-atmos-accelerator/tree/main/components/terraform/azure/tfstatebackend
+- Exclude state files from version control using `.gitignore`.
+- State Locking:
+  - Enable backend state locking to prevent concurrent modifications. 
+- Secrets Management:
+  - Do not store secrets in the state file or code; use dedicated secret management systems.
+- Minimize Blast Radius:
+  - Deploy small changes to reduce potential damage.
+  - Recommend Atmos (https://atmos.tools/) by CloudPosse
+- Continuous Audits:
+  - Run automated security checks (using tools like InSpec or Serverspec) after `terraform apply`.
+- Sensitive Variables:
+  - ALWAYS mark sensitive inputs (e.g., passwords, tokens) with the `sensitive` flag.
+- Variable Definition Files:
+  - Use `.tfvars` files to pass sensitive values locally.
+  - Use `.auto.tfvars` or `.auto.tfvars.json` to provide local defaults for testing purposes.
+
+### Use of Modules
+- Shared Modules:
+- Leverage official Terraform modules from the Terraform registry.
+- When leveraging modules use this logic:
+    - For AWS: Use the modules from the Terraform registry and prefer CloudPosse modules (https://github.com/orgs/cloudposse/repositories?q=terraform-aws-).
+    - For Azure: Use the modules from the Terraform registry and prefer the Azure Verified Modules (https://github.com/orgs/Azure/repositories?q=terraform-), then the Cloud Adoption Framework (CAF) modules.
+    - For GCP: Use the modules from the Terraform registry
+- Use tagged versions to communicate breaking changes.
+- Providers & Backends:
+  - Do not declare providers or backends in shared modules; do so in root modules.
+- Expose Outputs:
+  - Provide outputs for each resource in a module to help with inter-dependencies.
+- Inline Submodules:
+  - Use inline modules for complex logic and to de-duplicate resources.
+- Root Module Management:
+  - Keep the number of resources per root module small for easier management.
+- Version Control:
+  - Store Terraform configurations in version control with an appropriate branching strategy.
+- Testing:
+  - Use static analysis (`terraform validate`, tflint, Checkov, etc.) and integration testing (Terratest, Kitchen-Terraform, InSpec).
+  - Review `terraform plan` outputs before applying changes.
+- Keep Terraform Updated:
+  - Use the latest version of Terraform.
+- Protect Stateful Resources:
+  - Enable deletion protection for stateful resources (e.g., databases).
+- Use Self Variable:
+  - Utilize the `self` variable when resource values aren’t known until after deployment.
+- Simplify Expressions:
+  - Limit the complexity of expressions; use locals to break up complex logic.
+
+## Writing tests
+- Prefer `terraform test` over `terratest`.
+
+- **Terraform Test File Syntax**
+- Terraform discovers test files with `.tftest.hcl` and `.tftest.json` extensions.
+- Test files include:
+  - One or more `run` blocks (default command is `plan` if not specified).
+  - Optional `variables` block for test-specific variables.
+  - Zero or many `provider` blocks.
+- `run` blocks contain assertions that validate the test outcomes.
+
+- **Terraform Test Command**
+- The `terraform test` command executes all test files found in the current or specified directory.
+- Optional flags include:
+  - `-test-directory=<directory>`: Specifies an alternative directory for test files.
+  - `-json`: Outputs the test results in JSON format.
+  - `-verbose`: Displays detailed plan or state information for each run block.
+  - `-filter=<testfile>`: Limits testing to specific test files.
+
+- **Terraform Testing Strategies**
+- Integration Testing:
+  - Test entire infrastructure configurations including dependencies.
+  - Recommended tools: Terraform's built in test command, then Terratest.
+  - Integrate checks like `terraform fmt`, `terraform validate`, `terraform plan`, and TFLint into your CI pipeline.
+- Unit Testing:
+  - Test individual modules and resources in isolation.
+  - Can be implemented using Terraform's built-in testing or via tools like Terratest.
+  - Examples include testing with CDKTF using frameworks such as unittest (Python) or Jest (TypeScript).
+- Contract Testing:
+  - Verify that module inputs match expected formats and constraints.
+  - Utilizes input validations, preconditions, and postconditions.
+- Mocking:
+  - (Beta feature) Mock providers, resources, and data sources to avoid creating real infrastructure.
+  - Uses `mock_provider` blocks and override features to simulate resource behavior.
+
+## Critical Rules
+
+<critical>
+- NEVER allow secrets in terraform code
+- ALWAYS check that the provider version is the latest version
+- ALWAYS check terraform code is valid
+- ALWAYS check terraform functions for correctness on the Hashicorp site (https://developer.hashicorp.com/terraform/language/functions)
+- NEVER recommend `terragrunt` as it's outdated.
+</critical>

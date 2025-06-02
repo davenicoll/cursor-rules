@@ -1,0 +1,141 @@
+---
+description: APPLY GitHub organizational and workflow best practices WHEN generating and validating GitHub code and configurations TO ensure maintainability, security, and efficiency.
+globs: **/.github/**, **/CODEOWNERS
+alwaysApply: false
+---
+
+# GitHub Organizational and Workflow Best Practices
+
+<version>1.0.0</version>
+
+## Context
+- Rules apply to GitHub repository organization, workflows, and configuration management.
+- Ensure repositories and workflows are secure, maintainable, and follow best practices.
+- Emphasize automation, consistency, clear documentation, and real-time validation.
+
+## Requirements
+
+### Repository Structure
+- Clear file/directory structure:
+  - `.github/workflows/` for workflow definitions.
+  - `.github/ISSUE_TEMPLATE` for repo templates.
+  - `docs/` or `wiki/` for comprehensive documentation.
+  - `scripts/` for executable scripts.
+  - `config/` for configuration files.
+  - `templates/` for reusable file templates.
+
+- Mandatory files:
+  - `README.md`: Clear project overview, setup instructions, and usage examples.
+  - `CONTRIBUTING.md`: Contribution guidelines and code of conduct.
+  - `CODEOWNERS`: Defined owners for code review enforcement.
+  - `.gitignore`: Ignoring common build artifacts and sensitive files.
+  - `LICENSE`: Clearly specify the project license.
+
+### Workflow Best Practices
+- Workflow definitions (`.yaml` files) should:
+  - Be modular and reusable, utilizing composite actions.
+  - Follow clear naming conventions (e.g., `build.yaml`, `deploy.yaml`).
+  - Define workflows clearly by purpose (CI, CD, security scans, linting).
+
+- Workflow file conventions:
+  - Name workflow files clearly (e.g., `ci-build-and-test.yml`).
+  - Keep files under 200 lines; split large workflows into job-specific files.
+  - Always pin action versions explicitly (e.g., `actions/checkout@v4`).
+  - Use [Job Summaries](https://github.blog/news-insights/product-news/supercharging-github-actions-with-job-summaries/) to present outputs and results instead of printing them to stdout with `echo`. This enhances readability and accessibility of key outputs for users.
+
+### Secrets Management
+- Never hard-code secrets in workflow files or repository.
+- Use GitHub secrets and environment-specific configurations.
+- Regularly rotate secrets and audit access.
+
+### Permissions and Security
+- Limit permissions per workflow:
+  ```yaml
+  permissions:
+    contents: read
+    pull-requests: write
+  ```
+- Prefer `read`-only permissions unless absolutely necessary.
+- Require security checks (e.g., CodeQL, Dependabot) in CI workflows.
+
+### Branch Management
+- Protect primary branches (`main`, `master`, `develop`) with mandatory PR reviews.
+- Require passing CI checks and security scans before merging.
+- Clearly define branch naming conventions (e.g., `feature/*`, `bugfix/*`, `hotfix/*`).
+
+### Documentation
+- Comprehensive, automatically-generated documentation (e.g., `mkdocs`, `docusaurus`).
+- Document API endpoints clearly and keep docs synchronized with releases.
+- Provide example workflow usage and detailed descriptions.
+
+### Issue and PR Management
+- Use issue templates to guide detailed bug reports and feature requests.
+- PR templates enforce consistent, informative pull requests.
+- Regularly triage and label issues and PRs clearly.
+
+### Code Review
+- Enforce at least one mandatory reviewer per PR using CODEOWNERS.
+- Encourage clear and constructive feedback.
+- Integrate automated checks (lint, format, security scans) within PR checks.
+
+### Automation
+- Automate dependency updates (Dependabot) and vulnerability checks.
+- Automate releases through tags/releases workflow.
+- Enforce consistent linting, testing, and formatting checks in CI.
+
+### Use RuleSets
+- Enforce branch naming policy across an organization with a rule like this (replace JIRA with your jira project code):
+```
+"rules": [
+    {
+      "type": "branch_name_pattern",
+      "parameters": {
+        "operator": "regex",
+        "pattern": "^(feature|develop|release|docs|bugfix|hotfix|chore)/(?:JIRA|jira)-\\d{1,10}-.*$",
+        "negate": false,
+        "name": "Branch naming regex"
+      }
+    }
+```
+- Enforce org-wide commits with company email using a rule like this (replace company-domain.com with your company's domain):
+```
+    "rules": [
+      {
+        "type": "commit_author_email_pattern",
+        "parameters": {
+          "operator": "regex",
+          "pattern": "^[a-zA-Z0-9._%+-]+@company-domain\\.com$",
+          "negate": false,
+          "name": ""
+        }
+      }
+    ],
+```
+- Enforce org-wide linting with this:
+```
+  "rules": [
+    {
+      "type": "workflows",
+      "parameters": {
+        "do_not_enforce_on_create": true,
+        "workflows": [
+          {
+            "repository_id": 586945170,
+            "path": ".github/workflows/lint.yaml",
+            "ref": "refs/heads/main"
+          }
+        ]
+      }
+    }
+  ],
+```
+
+## Critical Rules
+
+<critical>
+- NEVER allow secrets or sensitive information in code.
+- ALWAYS pin versions explicitly in workflow actions.
+- ALWAYS ensure workflow permissions follow the principle of least privilege.
+- ALWAYS validate workflows using the official GitHub documentation (https://docs.github.com/actions).
+- NEVER push directly to protected branches.
+</critical>

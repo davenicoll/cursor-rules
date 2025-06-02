@@ -1,0 +1,108 @@
+---
+description: APPLY AWS CDK best practices WHEN generating, organizing, or validating infrastructure code using the AWS Cloud Development Kit TO ensure production-readiness, reusability, and security.
+globs: **/src/**, **/cdk/**, **/*.ts, **/*.js, **/*.py, **/*.java, **/*.cs, **/cdk.json, **/context.json
+alwaysApply: false
+---
+
+# AWS CDK Best Practices
+
+<version>1.0.2</version>
+
+## Context
+- These rules apply to the AWS Cloud Development Kit (CDK) projects in TypeScript.
+- Emphasize infrastructure-as-code discipline, strong typing, reuse, and automation.
+- Ensure projects are production-ready, testable, and follow secure defaults.
+
+## Requirements
+
+### Project Structure
+- Structure the repo to separate stacks, constructs, and utilities:
+  - `app.ts` → Entry point.
+  - `src/` or `cdk/` → CDK source code.
+    - `src/__tests__` → Unit tests.
+    - `src/services` → Reusable services (i.e. AWS SNS, AWS IAM, AWS Lambda).
+    - `src/stacks` → CDK stack definitions.
+    - `src/stacks/__tests__` → Stack unit tests.
+    - `src/types` → Reusable types (i.e. domain, environment).
+  - `lib/` → Reusable constructs and stacks.
+  - `cdk-ts.json` → Define default app, context.
+  - `cdk.context.json` → Store environment-specific values.
+
+### Coding Style
+- Prefer L2 constructs over L1. Use escape hatches only when required.
+- Prefer the const object over enum https://www.typescriptlang.org/docs/handbook/enums.html#objects-vs-enums
+- When stacks are a part of the same CDK app, prefer passing Props between stacks over Fn.ImportValue()
+- Configure with properties and methods, not environment variables
+- Let the AWS CDK manage roles and security groups with the construct library's grant() convenience methods
+- Prefer keeping stateful resources (like VPCs) in a separate stack (network/core/shared stack) from stateless resources (like API Gateway).
+- Define removal policies and log retention
+- Prefer using generated resource names, not physical names
+- Keep things simple as possible—but no simpler. Add complexity only when your requirements dictate a more complicated solution
+
+### Stack Design & Modularity
+- Use constructs to encapsulate resources with a specific responsibility.
+- Limit stacks to <20 resources for maintainability; otherwise, split into nested stacks or constructs.
+- Abstract reusable logic into `Constructs`.
+- Avoid hardcoding values; use context variables or environment settings.
+- Group logical units (API, database, monitoring) into constructs, and use stacks only for deployment composition
+
+### Configuration and Environments
+- Avoid hardcoding account or region values in stacks.
+- Use environment variables or CDK context (`cdk.json`, `context.json`).
+- Support multiple environments (dev, staging, prod) via configuration or context.
+
+### Naming and Tags
+- Apply consistent naming conventions for stacks and resources.
+- Auto-tag all resources with application, environment, owner, and purpose.
+  - Recommend centralized tagging logic via constructs or aspects.
+
+### Dependencies
+- Do not rely on resource creation order.
+- Use `stack.addDependency()` or `DependsOn` only when necessary.
+
+### Security Best Practices
+- Never include secrets or credentials in code.
+- Use `SecretsManager`, `SSM Parameter Store`, or GitHub Secrets.
+- Use least privilege IAM policies.
+- Use `cdk-nag` to enforce security linting on constructs and stacks.
+
+### Versioning and Dependencies
+- Pin CDK and library versions in `package.json`.
+- Avoid mixing major CDK versions.
+- Use `constructs` and `aws-cdk-lib` instead of legacy mono-packages.
+
+### Code Quality
+- Enforce linting with ESLint, Prettier, or similar tools.
+- Prefer strongly typed languages (TypeScript, Java) for better tooling.
+- Break long `Stack` classes into smaller constructs.
+- Validate synthesizable output with `cdk synth`.
+
+### Testing
+- Write unit tests using `jest`, `pytest`, or language-native frameworks.
+- Use `assertions` from CDK libraries to validate synthesized templates.
+- Include integration tests that validate outputs or state post-deploy.
+
+### CI/CD Integration
+- Integrate `cdk synth`, `cdk diff`, and `cdk deploy --require-approval` in pipelines.
+- Validate changes with approvals before live deployment.
+- Use environment-specific pipelines with separate roles.
+
+### Documentation
+- Document purpose and usage in `README.md` for each app or module.
+- Use inline comments for complex logic.
+- Include diagrams (using mermaid) and usage examples where helpful.
+  - Use CDK Graph to automate diagram generation (https://aws.github.io/aws-pdk/developer_guides/cdk-graph/index.html)
+
+## Critical Rules
+
+<critical>
+- NEVER store secrets or environment credentials in source.
+- ALWAYS run `cdk synth` to validate generated CloudFormation.
+- ALWAYS follow the resource tagging policy (if it's undefined, seek explicit clarification)
+- ALWAYS use constructs for logical units; reserve stacks solely for deployment grouping  
+- NEVER embed environment-variable lookups inside constructs  
+- ALWAYS unit-test with the CDK assertions module and keep synthesis deterministic
+- NEVER mix CDK v1 and v2 libraries
+- PREFER high-level L2 constructs; extend or wrap them for organization-wide patterns  
+- ALWAYS scope CDK CLI commands to target specific stacks and/or environments to avoid unintended changes, or use CDK context
+</critical>

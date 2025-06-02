@@ -1,0 +1,58 @@
+---
+description: Apply AWS Well-Architected Framework pillars when designing or reviewing AWS solutions
+globs: **/src/**, **/cdk/**, **/terraform/**, **/*.ts, **/*.js, **/*.py, **/*.cs, **/cdk.json, **/context.json,**/*.tf, **/*.tfvars, **/*.tftpl
+alwaysApply: false
+---
+
+# AWS Well-Architected Framework
+
+<version>1.0.0</version>
+
+## Context
+- When authoring, reviewing, or refactoring AWS infrastructure and applications
+- Ensures architecture decisions map to the Well‑Architected Framework pillars
+
+## Requirements
+- **Operational Excellence Checks**:
+  - Verify presence of CI/CD pipeline definitions (e.g., CodePipeline, GitHub Actions) automating build, test, deploy, and rollback steps
+  - Confirm a versioned runbook exists (e.g., markdown or runbook repository) covering incident response and post-incident reviews
+  - Detect CloudWatch Alarm and EventBridge rule resources tied to automated remediation actions (e.g., Systems Manager Automation documents, Lambda handlers)
+  - Ensure AWS Config ConfigurationRecorder and ConfigRule resources are defined, with remediation targets specified
+
+- **Security Checks**:
+  - Review IAM Role and Policy statements for least-privilege patterns; flag wildcard (*) actions or overly broad resource ARNs
+  - Check that all data stores (S3 buckets, RDS clusters, DynamoDB tables) have encryption enabled with KMS keys
+  - Validate TLS enforcement on load balancers, API Gateways, and other network endpoints
+  - Identify usage of AWS Secrets Manager or SSM Parameter Store for secret storage and verify rotation schedules
+  - Confirm AWS Security Hub, GuardDuty, and AWS WAF/Shield resources are enabled and configured
+
+- **Reliability Checks**:
+  - Detect multi-AZ deployment configurations for stateful and compute resources (Auto Scaling groups, RDS, ElastiCache)
+  - Check health check definitions for load balancers, target groups, and Route 53 health checks with DNS failover
+  - Verify AWS Backup plans or snapshot schedules exist for critical resources and reflect RPO/RTO targets
+  - Ensure Lambda function retry configurations and Auto Scaling policies are present for self-healing
+
+- **Performance Efficiency Checks**:
+  - Identify CloudWatch metrics collection and AWS Compute Optimizer recommendations integration
+  - Check for caching services (CloudFront distributions, ElastiCache clusters) defined alongside origin resources
+  - Detect serverless resource usage (Lambda, Fargate) for variable or event-driven workloads
+  - Verify autoscaling or serverless configuration on database resources (RDS Serverless, DynamoDB auto-scaling)
+
+- **Cost Optimization Checks**:
+  - Ensure resource tagging standards (CostCenter, Environment, Owner) are applied on all resources
+  - Detect use of Reserved Instances, Savings Plans, or Spot Instances configurations where applicable
+  - Check for AWS Budget resources or Cost Explorer anomaly detection alarms
+  - Identify idle or orphaned resources (unattached EBS volumes, unused Elastic IPs) and scheduled termination policies
+
+- **Sustainability Checks**:
+  - Verify integration with AWS Customer Carbon Footprint Tool or cost and usage report metrics
+  - Detect preference for managed and serverless services over self-managed instances
+  - Check for resource right-sizing configurations and efficient lifecycle policies
+  - Confirm documentation of sustainability goals in architecture diagrams or READMEs
+
+## Critical Rules
+- ALWAYS address each Well‑Architected pillar in design documentation and code
+- NEVER deploy resources without cost‑allocation tags and encryption enabled
+- ALWAYS codify operational procedures and alerts for automated remediation
+- ALWAYS enforce least‑privilege access and audit with Security Hub
+- ALWAYS design for AZ‑level redundancy and automated recovery

@@ -1,0 +1,32 @@
+---
+description: Validate package when adding dependency to Node.js, Python, C#, Java, or Ruby to ensure it exists and is >1 month old
+globs: **/*.js, **/*.ts, **/*.py, **/*.cs, **/*.java, **/*.rb
+alwaysApply: false
+---
+
+# Guardrail Package Dependencies
+
+<version>1.0.0</version>
+
+## Context
+- Applied when adding a new package dependency in Node.js, Python, C#, Java, or Ruby
+- Ensures third-party package reliability and maturity
+
+## Requirements
+- Before implementation, query the official package repository for the target language:
+  - Node.js (npm): https://registry.npmjs.org/
+  - Python (PyPI): https://pypi.org/project/
+  - C# (NuGet): https://www.nuget.org/packages/
+  - Java (Maven Central): https://search.maven.org/artifact/
+  - Ruby (RubyGems): https://rubygems.org/gems/
+- Confirm the package exists, never assume it does
+- Check the package's initial release date and ensure it is at least one month old
+- If checks fail, abort the operation and ask the user how to proceed
+
+## Critical Rules
+
+<critical>
+- ALWAYS verify package existence before proceeding
+- NEVER allow packages younger than one month to be installed
+- ALWAYS abort and alert the user on failure
+</critical>
