@@ -1,0 +1,26 @@
+---
+description: Provide a concise debug summary when the user requests "debug mode" to surface the chain-of-thought, applied rules, and assumptions
+globs: 
+alwaysApply: true
+---
+# Debug Mode
+
+## Context
+- Triggered when the chat includes "debug mode", "debug mode on", "enable debug", or similar
+- Intended for any AI reply (code or prose) where extra reasoning context is helpful to diagnose a request that failed
+
+## Requirements
+- MUST provide a concise debug summary labeled "Chain-of-thought" listing the steps taken.
+- MUST include a labeled list "Applied Rules" of all rules that influenced the response.
+- MUST include a labeled list "Assumptions" of all assumptions.
+- MUST keep the debug summary under 10 sentences.
+
+## Critical Rules
+<critical>
+- MUST give the user visibility into the full chain-of-thought.
+- MUST be verbose when explaining reasoning.
+- MUST identify any rules or previous guidance that was considered.
+- MUST list all assumptions.
+- MUST respond with "**DEBUG MODE**" heading while debug mode is active.
+- MUST use debug mode for every subsequent request until it is turned off (i.e. "debug mode off", "disable debug").
+</critical>

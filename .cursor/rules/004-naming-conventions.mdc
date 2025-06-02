@@ -3,7 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
-
 # Naming Conventions Standards
 
 <version>1.0.0</version>
@@ -17,8 +16,8 @@ alwaysApply: true
 ## Requirements
 
 ### General Principles
-- Names should be descriptive and reveal intent
-- Names should be searchable and pronounceable
+- Names MUST be descriptive and reveal intent
+- Names MUST be searchable and pronounceable
 - Avoid abbreviations except for common ones (e.g., ID, HTTP)
 - Use consistent terminology across the codebase
 
@@ -38,7 +37,7 @@ alwaysApply: true
 - Use camelCase for function and method names (e.g. `findAll()`)
 - Use verb or verb phrases for functions that perform actions
 - Use noun or noun phrases for functions that return values
-- Prefix boolean getters with `is`, `has`, or `should`
+- Prefix boolean getters with `is`, `has`, or `can`
 
 ### Variables and Properties
 - Use camelCase for variable and property names (e.g. `userProfile: UserProfile;`)

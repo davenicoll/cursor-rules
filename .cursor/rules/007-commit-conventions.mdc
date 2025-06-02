@@ -3,7 +3,6 @@ description: APPLY commit message conventions WHEN creating commits TO ensure cl
 globs: 
 alwaysApply: false
 ---
-
 # Commit Message Conventions
 
 <version>1.0.0</version>
@@ -48,7 +47,7 @@ alwaysApply: false
 ### Language Standards
 - Write all commit messages in English
 - Use clear and concise language
-- Avoid technical jargon unless necessary
+- MUST NOT use technical jargon unless necessary
 - Be specific about what changed
 
 ## Examples

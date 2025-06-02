@@ -3,7 +3,6 @@ description: APPLY Clean Architecture principles WHEN organizing code TO ensure 
 globs: apps/frontend/**
 alwaysApply: false
 ---
-
 # Architecture Standards
 
 <version>1.1.0</version>
@@ -162,27 +161,27 @@ export class UserService {
 
 ### Feature Organization
 - Organize code by business features rather than technical concerns
-- Each feature should be self-contained with its own components, hooks, and state
-- Shared components should be placed in a common UI library
-- Features should communicate through well-defined interfaces
+- Each feature MUST be self-contained with its own components, hooks, and state
+- Shared components MUST be placed in a common UI library
+- Features MUST communicate through well-defined interfaces
 
 ### Feature Structure
-- Each feature should have a clear entry point (index.ts/tsx)
-- Keep feature-specific components within the feature directory
-- Implement feature-specific hooks for business logic
-- Use feature-specific types for type definitions
+- Each feature MUST have a clear entry point (index.ts or index.tsx)
+- Feature-specific components MUST be kept within the feature directory
+- Feature-specific hooks MUST be implemented for business logic
+- Feature-specific types MUST be used for type definitions
 
 ### State Management
-- Keep state as close as possible to where it's used
-- Use global state only for truly global concerns
-- Implement proper state isolation between features
-- Use context or state management libraries judiciously
+- State MUST be kept as close as possible to where it's used
+- Global state MUST be used only for truly global concerns
+- Proper state isolation between features MUST be implemented
+- Context or state management libraries MUST be used only when necessary with defined criteria
 
 ### Component Organization
-- Separate container components (with logic) from presentational components
-- Keep components focused on a single responsibility
-- Implement proper prop validation with TypeScript
-- Use composition over inheritance for component reuse
+- Container components (with logic) MUST be separated from presentational components
+- Components MUST be focused on a single responsibility
+- Proper prop validation with TypeScript MUST be implemented
+- Composition MUST be used over inheritance for component reuse
 
 ### Frontend Examples
 

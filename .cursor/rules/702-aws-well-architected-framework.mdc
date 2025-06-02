@@ -3,7 +3,6 @@ description: Apply AWS Well-Architected Framework pillars when designing or revi
 globs: **/src/**, **/cdk/**, **/terraform/**, **/*.ts, **/*.js, **/*.py, **/*.cs, **/cdk.json, **/context.json,**/*.tf, **/*.tfvars, **/*.tftpl
 alwaysApply: false
 ---
-
 # AWS Well-Architected Framework
 
 <version>1.0.0</version>
@@ -28,7 +27,7 @@ alwaysApply: false
 
 - **Reliability Checks**:
   - Detect multi-AZ deployment configurations for stateful and compute resources (Auto Scaling groups, RDS, ElastiCache)
-  - Check health check definitions for load balancers, target groups, and Route 53 health checks with DNS failover
+  - Check health check definitions for load balancers, target groups, and Route 53 health checks with DNS failover
   - Verify AWS Backup plans or snapshot schedules exist for critical resources and reflect RPO/RTO targets
   - Ensure Lambda function retry configurations and Auto Scaling policies are present for self-healing
 
@@ -51,8 +50,11 @@ alwaysApply: false
   - Confirm documentation of sustainability goals in architecture diagrams or READMEs
 
 ## Critical Rules
-- ALWAYS address each Well‑Architected pillar in design documentation and code
-- NEVER deploy resources without cost‑allocation tags and encryption enabled
+
+<critical>
+- ALWAYS address each Well-Architected pillar in design documentation and code
+- NEVER deploy resources without cost-allocation tags and encryption enabled
 - ALWAYS codify operational procedures and alerts for automated remediation
-- ALWAYS enforce least‑privilege access and audit with Security Hub
-- ALWAYS design for AZ‑level redundancy and automated recovery
+- ALWAYS enforce least-privilege access and audit with Security Hub
+- ALWAYS design for AZ-level redundancy and automated recovery
+</critical>

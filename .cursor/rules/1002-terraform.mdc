@@ -3,7 +3,6 @@ description: APPLY Terraform module best practices WHEN generating and validatin
 globs: **/*.tf, **/*.tfvars, **/*.tftpl
 alwaysApply: false
 ---
-
 # Terraform Module Best Practices
 
 <version>1.0.0</version>
@@ -21,9 +20,9 @@ alwaysApply: false
   - Azure: https://registry.terraform.io/providers/hashicorp/azurerm/latest
   - AWS: https://registry.terraform.io/providers/hashicorp/aws/latest
   - GCP: https://registry.terraform.io/providers/hashicorp/google/latest
-- Determine the latest version of Terrafrom from here: https://github.com/hashicorp/terraform/releases
-  - Only use stable versions. No alpha or beta releases and no release candidates.
-- Do not update versions without asking the user first.
+- Determine the latest version of Terraform from here: https://github.com/hashicorp/terraform/releases
+  - Versions MUST be stable; no alpha, beta, or release candidates.
+- Version updates MUST not occur without prior user approval.
 - If the provider version is a major upgrade, specifically mention it's a major upgrade.
 - **Fail-Safe:** If the online check fails, stop and inform the user.
 
@@ -100,7 +99,7 @@ settings:
     - Organize outputs in an `outputs.tf` file.
     - Use clear, descriptive names (e.g., `{name}_{type}_{attribute}`) and document them.
 - Dependencies:
-    - `depends_on` can be useful to specifically set dependencies between resources, but should be avoided where possible.
+    - `depends_on` can be useful to specifically set dependencies between resources, but MUST be avoided where possible.
     - Using a `data` lookup is preferred over a `depends_on`.  
 - Maintain consistent code structure:
     - Order blocks such as `count`, `for_each`, `tags`, `depends_on`, and `lifecycle` consistently.
@@ -157,7 +156,7 @@ settings:
 - Protect Stateful Resources:
   - Enable deletion protection for stateful resources (e.g., databases).
 - Use Self Variable:
-  - Utilize the `self` variable when resource values aren’t known until after deployment.
+  - Utilize the `self` variable when resource values aren't known until after deployment.
 - Simplify Expressions:
   - Limit the complexity of expressions; use locals to break up complex logic.
 

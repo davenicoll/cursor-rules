@@ -3,7 +3,6 @@ description: APPLY version management standards WHEN installing or updating depe
 globs: **/package.json
 alwaysApply: true
 ---
-
 # Version Management Standards
 
 <version>1.0.0</version>
@@ -16,9 +15,9 @@ alwaysApply: true
 
 ### Dependencies management
 
-- Never install new package directly, always ask user
-- Avoid installation new packages if you can use current ones
-- Prefer stable versions
+- MUST ask the user for approval before installing any new package.
+- MUST reuse existing packages when possible.
+- MUST use stable versions
 
 ## Critical Rules
 

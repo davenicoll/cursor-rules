@@ -1,104 +1,92 @@
 ---
-description: Use ALWAYS when asked to CREATE A RULE, UPDATE A RULE, or when taught a lesson by the user that should be retained as a new rule for Cursor
+description: APPLY when CREATE A RULE, UPDATE A RULE, or user provides specific feedback to establish new rule for Cursor
 globs: .cursor/rules/*.mdc
 alwaysApply: false
 ---
 # Cursor Rules Format
-## Template Structure for Rule Files
 
+## Template Structure for Rule Files
 ```mdc
 ---
-description: ACTION when TRIGGER to OUTCOME
+description: [VERB] when [SPECIFIC_TRIGGER] to [MEASURABLE_OUTCOME]
 globs: .cursor/rules/**/*.mdc
-alwaysApply: {true or false}
+alwaysApply: {true|false}
 ---
-
 # Rule Title
-
 ## Context
-- When to apply this rule
-- Prerequisites or conditions
-
+- Specific conditions when this rule applies
+- Required file types or project states
 ## Requirements
-- Concise, actionable items
-- Each requirement must be testable
-
+- Actionable items with measurable criteria
+- Each requirement must specify pass/fail conditions
 ## Examples
 <example>
-Good concise example with explanation
+Valid example demonstrating requirement compliance
 </example>
-
 <example type="invalid">
-Invalid concise example with explanation
+Invalid example showing specific violations
 </example>
-
 ## Critical Rules
-  - Always do X
-  - NEVER do Y
+<critical>
+- MUST always perform X when condition Y is met
+- MUST NEVER perform Z under any circumstances
+</critical>
 ```
 
 ## File Organization
-
 ### Location
 - Path: `.cursor/rules/`
 - Extension: `.mdc`
 
 ### Naming Convention
 PREFIX-name.mdc where PREFIX is:
-- 0XX: Core standards
-- 1XX: Tool configs
-- 3XX: Testing standards
-- 1XXX: Language rules (e.g., C#)
-- 2XXX: Framework rules (e.g., React)
-- 7XX: System rules (e.g., GitHub)
-- 8XX: Workflows
-- 9XX: Templates
+- 0XX: Core standards (00-99)
+- 1XX: Tool configs (100-199)
+- 3XX: Testing standards (300-399)
+- 7XX: System rules (700-799)
+- 8XX: Workflows (800-899)
+- 9XX: Templates (900-999)
+- 1XXX: Language rules (1000-1999)
+- 2XXX: Framework rules (2000-2999)
 - _name.mdc: Private rules
 
 ### Glob Pattern Examples
-Common glob patterns for different rule types:
-- Core standards: .cursor/rules/*.mdc
-- Language rules: src/**/*.{js,ts}
-- Testing standards: **/*.test.{js,ts}
-- React components: src/components/**/*.tsx
-- Documentation: docs/**/*.md
-- Configuration files: *.config.{js,json}
-- Build artifacts: dist/**/*
-- Multiple extensions: src/**/*.{js,jsx,ts,tsx}
-- Multiple files: dist/**/*, docs/**/*.md
+Standard patterns by rule type:
+- Core standards: `.cursor/rules/*.mdc`
+- Language rules: `src/**/*.{js,ts}`
+- Testing standards: `**/*.test.{js,ts}`
+- React components: `src/components/**/*.tsx`
+- Documentation: `docs/**/*.md`
+- Configuration files: `*.config.{js,json}`
+- Build artifacts: `dist/**/*`
+- Multiple extensions: `src/**/*.{js,jsx,ts,tsx}`
+- Multiple directories: `{dist/**/*,docs/**/*.md}`
 
 ## Required Fields
-
 ### Frontmatter
-- description: ACTION TRIGGER OUTCOME format
-- globs: `glob pattern for files and folders`
-- alwaysApply: {true or false} – when true, will be attached to every conversation (but frontmatter is still important for it to be used!)
-- dependencies: `400-md-docs.mdc` – specify dependent rules
-- priority: 10 – set specific prioritization for the rule, useful for setting high-priority rules (such as security guidance)
-
+- description: Must follow ACTION when TRIGGER to OUTCOME format (max 120 chars)
+- globs: Standard glob pattern without quotes
+- alwaysApply: Boolean value (true or false)
+- dependencies: Rule file dependencies (optional)
+- priority: Integer 1-10 for rule precedence (optional, default: 5)
 ### Body
-- context: Usage conditions
-- requirements: Actionable items
-- examples: Both valid and invalid
-- critical-rules: Summary of short rule bullets that are the most critical to abide by
+- Context: Specific conditions and file type requirements
+- Requirements: Actionable items with pass/fail criteria
+- Examples: At minimum one valid example; include invalid when violations are common
+- Critical Rules: Up to 10 bullet points using MUST/MUST NEVER/ALWAYS language
 
 ## Formatting Guidelines
-
 - Use concise Markdown primarily
-- Use some XML tags limited to:
-  - <example>
-  - <danger>
-  - <required>
-- Always indent content within XML or nested XML tags by 2 spaces
-- Emojis and Mermaid diagrams are allowed if they are not redundant and better explain the rule for AI comprehension.
-
+- XML tags limited to: `<example>`, `<example type="invalid">`, `<danger>`, `<required>`
+- Always indent content within XML tags by 2 spaces
+- Emojis allowed when they clarify technical concepts
+- Mermaid diagrams allowed when replacing >5 lines of explanation
 
 ## Critical Rules
-  - Keep frontmatter description under 120 characters (or fewer) while maintaining clear intent for rule selection by the AI agent
-  - Keep the rule DRY – do not repeat, be redundant, or overly explanatory
-  - Use succinct Markdown the agent can easily understand
-  - The frontmatter MUST ALWAYS have `description`, `globs`, and `alwaysApply`, (keys and values unquoted) even if the value is null
-  - Use standard glob patterns without quotes (e.g., *.js, src/**/*.ts)
-  - TRY to keep the total rule line count under 50—better under 25 lines—unless there are diagrams or longer required examples, which may increase the total line count
-  - Always include a valid and invalid example
-  - Quotes are not needed around glob patterns
+- Frontmatter MUST include description, globs, and alwaysApply
+- Use deterministic language (MUST/MUST NEVER instead of SHOULD/TRY), no "best practice" 
+- Provide specific trigger conditions (avoid "when appropriate")
+- Include measurable success criteria for each requirement
+- Keep rule line count under 50 (exceptions: diagrams >10 lines, examples >15 lines)
+- ALWAYS include valid example; include invalid example when violations are common
+- Replace non-deterministic language with specific, measurable requirements

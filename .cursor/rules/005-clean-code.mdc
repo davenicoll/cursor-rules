@@ -3,7 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
-
 # Clean Code Standards
 
 <version>1.0.0</version>
@@ -16,8 +15,8 @@ alwaysApply: true
 ## Requirements
 
 ### Code Generation
-- Strongly type everythink
-- Never us untyped values (`any`, `unknown`, `mixed`, `object` etc. are prohibited)
+- Strongly type everything
+- Never use untyped values (`any`, `unknown`, `mixed`, `object` etc. are prohibited)
 - Force explicit constants instead of magic numbers.
 - Write clear and simple conditions.
 - No double negatives.
@@ -50,7 +49,7 @@ alwaysApply: true
 
 ### Error Handling
 - Use custom domain error for different error categories
-- Error messages must be meaningful and SHOULD be translated to the user's language
+- Error messages MUST be meaningful and translated to the user's language
 - Fail fast: early throws errors, avoid returning null or undefined
 - Errors in logs are tracked with error codes, in English
 

@@ -32,7 +32,7 @@ alwaysApply: false
   - `LICENSE`: Clearly specify the project license.
 
 ### Workflow Best Practices
-- Workflow definitions (`.yaml` files) should:
+- Workflow definitions (`.yaml` files) MUST:
   - Be modular and reusable, utilizing composite actions.
   - Follow clear naming conventions (e.g., `build.yaml`, `deploy.yaml`).
   - Define workflows clearly by purpose (CI, CD, security scans, linting).

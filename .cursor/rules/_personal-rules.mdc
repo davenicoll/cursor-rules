@@ -1,0 +1,7 @@
+---
+description: ALWAYS follow these rules
+globs: 
+alwaysApply: true
+---
+
+* ALWAYS list the rules applied, before responding to a request
