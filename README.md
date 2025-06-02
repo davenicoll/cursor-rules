@@ -1,8 +1,8 @@
 # Cursor Rules
 
-This repository serves as a style guide for implementing Cursor rules. It consolidates rules for naming conventions, clean code principles, version management, and project-specific architectural guidelines. These rules aim to guide Cursor's AI to more predictable, reliable answers.
+I created this repo as a style guide for Cursor rules—covering naming conventions, clean-code practices, version management, and our architecture guidelines. The goal is to steer Cursor’s AI toward more consistent, reliable outputs.
 
-See here https://davenicoll.com/getting-started-with-ai-assisted-coding/ for how to use these rules.
+See https://davenicoll.com/getting-started-with-ai-assisted-coding/ for how to use these rules.
 
 ## Cursor Setup
 
