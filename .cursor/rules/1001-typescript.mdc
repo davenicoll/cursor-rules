@@ -6,7 +6,7 @@ alwaysApply: false
 
 # TypeScript Standards
 
-<version>1.0.0</version>
+<version>1.1.0</version>
 
 ## Context
 - These rules apply to all TypeScript code in the project
@@ -59,7 +59,15 @@ alwaysApply: false
 - Use named imports rather than default imports
 - Group imports by origin (internal, external, relative)
 - Export types and interfaces used outside the module
-- Use barrel files (index.ts) to simplify imports
+- Use direct imports instead of barrel files (index.ts) to avoid build performance issues
+- Import directly from source files: `import { Component } from './component'`
+- Avoid re-exports that create barrel files: `export * from './module'`
+
+### Barrel Files - Performance Critical
+- Do not create barrel files (index.ts files that re-export from multiple modules)
+- Do not use `export * from` patterns that aggregate multiple modules
+- Import directly from specific files to improve tree-shaking and build performance
+- Avoid intermediate re-export files that simply pass through exports
 
 ## Examples
 
@@ -100,6 +108,11 @@ function isUser(value: unknown): value is User {
 function displayUserName(user?: User): string {
   return user?.name ?? 'Anonymous';
 }
+
+// Direct imports (preferred)
+import { Button } from './components/button';
+import { Input } from './components/input';
+import { validateEmail } from './utils/validation';
 </example>
 
 <example type="invalid">
@@ -137,6 +150,15 @@ export function fetchUsers() {
 function getUser(id: string): User | null {
   // ...
 }
+
+// Barrel file pattern (causes build performance issues)
+// index.ts
+export * from './button';
+export * from './input';
+export * from './modal';
+
+// Importing from barrel file (causes memory issues)
+import { Button, Input, Modal } from './components'; // Loads entire module graph
 </example>
 
 ## Critical Rules
@@ -147,4 +169,6 @@ function getUser(id: string): User | null {
 - NEVER use type assertions (`as`) when type guards can be used
 - ALWAYS use strict null checking
 - NEVER disable TypeScript strict mode
-</critical> 
+- NEVER create barrel files or use `export *` patterns that aggregate modules
+- ALWAYS import directly from source files to optimize build performance and tree-shaking
+</critical>
