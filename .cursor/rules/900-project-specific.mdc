@@ -8,4 +8,4 @@ alwaysApply: true
 
 <version>1.0.0</version>
 
-ALWAYS sign commits using my git global config
+ALWAYS sign commits using my git global config (if signing is configured)
