@@ -1,0 +1,247 @@
+
+---
+description: APPLY Go best practices WHEN writing Go code TO ensure clean, efficient, and maintainable programs
+globs: "**/*.go"
+alwaysApply: true
+---
+description: APPLY Go best practices WHEN writing Go code TO ensure clean, efficient, and maintainable programs
+globs: "**/*.go"
+alwaysApply: true
+---
+
+# Go Language Standards
+
+<version>1.0.0</version>
+
+## Context
+- These rules apply to all Go code in the project
+- They ensure consistency, performance, and maintainability
+- They complement Go's built-in tools like gofmt, go vet, and golint
+- They apply to both application code and library packages
+
+## Requirements
+
+### Idiomatic Style
+- MUST use single-letter names only for loop counters with scope < 10 lines (`i`, `j`, `k`)
+- MUST use `err` for all error variables
+- MUST leverage zero values instead of explicit initialization (`var count int` not `count := 0`)
+- MUST run gofmt on all Go files before committing
+- MUST run goimports to organize imports automatically
+- MUST use CamelCase for exported identifiers and camelCase for unexported ones
+- MUST use MixedCaps for multi-word names, NEVER underscores
+
+### Error Handling
+- MUST check and handle ALL errors explicitly using if statements
+- MUST return errors as the last return value from functions that can fail
+- MUST use `fmt.Errorf` to wrap errors when adding context
+- MUST use `panic` only for programming errors (nil pointer, array bounds)
+- MUST return errors for ALL routine error conditions, NEVER use panic
+- MUST create custom error types when errors need structured data
+
+### Function Design
+- MUST keep functions under 50 lines of code
+- MUST limit function parameters to maximum 3 parameters
+- MUST use structs when functions require more than 3 parameters
+- MUST use early returns when nesting exceeds 2 levels
+- MUST write functions that perform exactly one operation
+- MUST use function names that contain a verb describing the action performed
+
+### Interfaces
+- MUST limit interfaces to maximum 2 methods
+- MUST define interfaces in the package that consumes them, NEVER in implementation packages
+- MUST accept interfaces as parameters and return concrete types
+- MUST use struct embedding instead of inheritance patterns
+- MUST rely on implicit interface satisfaction, NEVER use explicit declarations
+
+### Concurrency
+- MUST use goroutines only when operations can run independently
+- MUST use channels for goroutine communication, mutexes only for protecting shared state
+- MUST ensure ALL goroutines terminate through context cancellation or done channels
+- MUST use context.Context for operations longer than 100ms or with external dependencies
+- MUST use buffered channels when sender and receiver operate at different rates
+- MUST close channels from the sender side, NEVER from receiver side
+
+### Memory Management
+- MUST use zero values instead of explicit initialization when possible
+- MUST pre-allocate slices with known capacity when size > 100 elements
+- MUST reuse buffers for operations processing > 1000 items
+- MUST nil out slice/map references when no longer needed to prevent memory leaks
+- MUST use `sync.Pool` for objects allocated > 1000 times per second
+- MUST profile with pprof when memory usage exceeds 100MB or GC pressure > 10%
+
+### Package Organization
+- MUST use lowercase package names without underscores or mixed case
+- MUST limit packages to maximum 15 files or single domain concept
+- MUST group files by business domain, NEVER by technical layer
+- MUST place private code in `internal/` when used by multiple packages
+- MUST follow layout: `cmd/` for binaries, `pkg/` for libraries, `internal/` for private code
+- MUST limit package nesting to maximum 3 levels deep
+
+### Testing
+- MUST write table-driven tests when testing > 3 input scenarios
+- MUST use `t.Run` for subtests when grouping related test cases
+- MUST achieve minimum 80% test coverage for all packages
+- MUST write benchmarks for functions processing > 1000 operations/second
+- MUST use `testing.TB` interface for all shared test helper functions
+- MUST test both success paths and ALL error conditions
+
+### Documentation
+- MUST document ALL exported functions, types, and variables
+- MUST start comments with the exact name of the element being documented
+- MUST write comments as complete sentences ending with periods
+- MUST include `Example` functions for ALL exported functions with parameters
+- MUST limit documentation comments to maximum 3 sentences
+- MUST format comments for godoc compatibility (no special formatting)
+
+### Code Structure
+- MUST place exactly one package per directory
+- MUST group imports in order: standard library, third-party, local packages
+- MUST separate import groups with exactly one blank line
+- MUST avoid dot imports except in `_test.go` files
+- MUST use variable names > 3 characters except for loop counters
+- MUST organize packages by business domain, NEVER by technical function
+
+### Performance
+- MUST write benchmarks for functions called > 1000 times per second
+- MUST use pprof when CPU usage > 70% or latency > 100ms
+- MUST minimize allocations in functions called > 10,000 times per second
+- MUST use string builders when concatenating > 5 strings
+- MUST cache computations that take > 10ms and are called repeatedly
+- MUST use maps for lookups > 10 items, slices for iteration < 100 items
+
+## Examples
+
+<example>
+// Good Go code example
+
+// Package calculator provides basic arithmetic operations.
+package calculator
+
+import (
+    "fmt"
+    "math"
+)
+
+// Result represents the result of a calculation.
+type Result struct {
+    Value float64
+    Error error
+}
+
+// Calculator performs mathematical operations.
+type Calculator struct {
+    precision int
+}
+
+// NewCalculator creates a new calculator with specified precision.
+func NewCalculator(precision int) *Calculator {
+    return &Calculator{
+        precision: precision,
+    }
+}
+
+// Divide performs division and returns an error for division by zero.
+func (c *Calculator) Divide(numerator, denominator float64) (float64, error) {
+    if denominator == 0 {
+        return 0, fmt.Errorf("division by zero: %f / %f", numerator, denominator)
+    }
+    
+    result := numerator / denominator
+    return math.Round(result*math.Pow10(c.precision))/math.Pow10(c.precision), nil
+}
+
+// ProcessNumbers processes a slice of numbers concurrently.
+func ProcessNumbers(numbers []float64, processor func(float64) float64) []float64 {
+    results := make([]float64, len(numbers))
+    
+    // Use goroutines for concurrent processing
+    type result struct {
+        index int
+        value float64
+    }
+    
+    resultChan := make(chan result, len(numbers))
+    
+    for i, num := range numbers {
+        go func(index int, number float64) {
+            resultChan <- result{
+                index: index,
+                value: processor(number),
+            }
+        }(i, num)
+    }
+    
+    // Collect results
+    for i := 0; i < len(numbers); i++ {
+        res := <-resultChan
+        results[res.index] = res.value
+    }
+    
+    return results
+}
+</example>
+
+<example type="invalid">
+// Bad Go code example
+
+package calculator
+
+import (
+    "fmt"
+    . "math" // Avoid dot imports
+)
+
+// Don't use underscores in Go names
+type calculation_result struct {
+    val float64
+    err error
+}
+
+// Function name doesn't follow Go conventions
+func divide_numbers(a, b float64) (float64, error) {
+    // No error handling for division by zero
+    return a / b, nil
+}
+
+// Ignoring errors (bad practice)
+func ProcessData(filename string) string {
+    data, _ := ioutil.ReadFile(filename) // Ignoring error
+    return string(data)
+}
+
+// Using panic for routine errors
+func GetConfig(key string) string {
+    value := os.Getenv(key)
+    if value == "" {
+        panic("Config key not found") // Should return error instead
+    }
+    return value
+}
+
+// Function too long and doing too many things
+func ComplexFunction(data []string) map[string]int {
+    result := make(map[string]int)
+    // ... 100+ lines of code doing multiple things
+    return result
+}
+
+// No documentation for exported function
+func PublicFunction() {
+    // Implementation
+}
+</example>
+
+## Critical Rules
+
+<critical>
+- ALWAYS check and handle errors explicitly with if statements
+- NEVER ignore errors by using blank identifier (_) unless absolutely necessary
+- ALWAYS use gofmt to format code consistently
+- NEVER use panic for routine error conditions
+- ALWAYS document exported functions, types, and variables
+- NEVER use dot imports except in test files
+- ALWAYS ensure goroutines terminate to prevent leaks
+- NEVER modify slices/maps passed as parameters without clear documentation
+- ALWAYS use meaningful names for variables, functions, and types
+- NEVER use global variables unless absolutely necessary for configuration
+</critical>
