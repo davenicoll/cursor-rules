@@ -54,6 +54,10 @@ Vector databases are useful for modern applications. By following these principl
 - MUST ALWAYS ensure each paragraph contributes new information beyond restating the obvious
 - MUST NEVER use made-up technical terms or jargon without verification
 - MUST ALWAYS align sentence subjects with the actual topic being discussed
-- MUST NEVER substitute bullet points for connected ideas that need contextual flow
+- MUST NEVER substitute bullet points for connected ideas that require narrative flow, emotional pacing, or story progression 
+- MUST ONLY use bullet points when listing parallel facts, options, takeaways, or technical components that do not depend on preceding or following context 
+- MUST ALWAYS favor paragraph form for personal anecdotes, sequences of events, or moments with cause-effect relationships
 - MUST ALWAYS maintain contribution-to-length ratio where readers gain value proportional to time invested
 </critical>
+
+
