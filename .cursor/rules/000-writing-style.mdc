@@ -1,0 +1,59 @@
+---
+description: ENFORCE when WRITING DOCUMENTATION to ELIMINATE LLM-GENERATED PATTERNS
+globs: docs/**, **/*.md
+alwaysApply: false
+---
+
+# Anti-LLM Writing Patterns
+
+## Context
+- Applies to all documentation, README files, blog posts, and technical writing
+- Triggers during writing, editing, or reviewing any prose content
+- Required for maintaining human-quality writing standards in documentation
+
+## Requirements
+- MUST eliminate empty summary sentences that conclude without substance
+- MUST vary sentence length to create natural rhythm and emphasis
+- MUST choose subjects that align with the main topic of each sentence
+- MUST provide concrete examples and specific references instead of vague claims
+- MUST define technical terms when first introduced
+- MUST limit demonstrative pronouns (this, that, these, those) to clear antecedents
+- MUST ensure information density exceeds 60% meaningful content per paragraph
+- MUST replace fluent-but-empty explanations with substantial insights
+
+## Examples
+
+<example>
+**Good writing with varied rhythm and clear subjects:**
+We just launched a new conversational AI feature. It answers user questions in plain language, using context from the current session. The system searches help articles, scores them with a custom ranking function, feeds the top result into a fine-tuned language model, and runs in under 300ms using caching, pruning, and prompt tuning techniques.
+</example>
+
+<example type="invalid">
+**Bad: Flat rhythm and wrong subjects:**
+We recently launched a conversational AI feature that lets users ask questions in plain English and get responses based on their past activity and current session. The system searches a database of help articles, ranks the most relevant ones using a custom scoring function, and passes the top result into a language model to generate the final answer. We spent weeks optimizing each step to keep latency under 300 milliseconds, including caching, pruning irrelevant articles, and tuning prompt templates.
+</example>
+
+<example>
+**Good: Specific and substantial:**
+Vector databases store embeddings—mathematical representations that capture semantic meaning in hundreds of dimensions. Unlike traditional keyword search, vector databases find results that are semantically "close" in meaning, not just exact text matches.
+</example>
+
+<example type="invalid">
+**Bad: Empty summary sentence:**
+Vector databases are useful for modern applications. By following these principles, you can achieve better search performance.
+</example>
+
+## Critical Rules
+
+<critical>
+- MUST NEVER end paragraphs with empty conclusions like "By following these steps, we achieve better performance"
+- MUST NEVER use demonstrative pronouns without clear antecedents in the same or previous sentence
+- MUST NEVER write sentences where every clause is the same length
+- MUST ALWAYS define technical terms on first use rather than assuming knowledge
+- MUST ALWAYS provide specific examples instead of vague references to "experts" or "studies"
+- MUST ALWAYS ensure each paragraph contributes new information beyond restating the obvious
+- MUST NEVER use made-up technical terms or jargon without verification
+- MUST ALWAYS align sentence subjects with the actual topic being discussed
+- MUST NEVER substitute bullet points for connected ideas that need contextual flow
+- MUST ALWAYS maintain contribution-to-length ratio where readers gain value proportional to time invested
+</critical>
