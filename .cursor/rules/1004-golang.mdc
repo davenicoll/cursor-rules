@@ -72,6 +72,20 @@ alwaysApply: true
 - MUST follow layout: `cmd/` for binaries, `pkg/` for libraries, `internal/` for private code
 - MUST limit package nesting to maximum 3 levels deep
 
+### Clean Architecture Folder Structure
+- MUST organize `internal/` following clean architecture layers:
+  - `internal/domain/`: Pure business entities, rules, and interfaces
+  - `internal/application/`: Use cases, services, and dependency injection
+  - `internal/adapters/`: Interface implementations organized by type
+    - `adapters/persistence/`: Database and file system implementations
+    - `adapters/external/`: External API clients and message queues
+    - `adapters/ui/`: User interface implementations
+    - `adapters/messaging/`: Event publishers and message handlers
+  - `internal/presentation/`: HTTP handlers, CLI commands, gRPC servers
+- MUST keep domain models free of Go struct tags (use DTOs in adapters)
+- MUST define interfaces in consuming packages, not implementing packages
+- MUST use dependency injection to wire interface implementations
+
 ### Testing
 - MUST write table-driven tests when testing > 3 input scenarios
 - MUST use `t.Run` for subtests when grouping related test cases
