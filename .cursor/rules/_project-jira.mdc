@@ -1,0 +1,48 @@
+---
+description: ALWAYS READ THIS to obtain Jira information
+globs:
+alwaysApply: true
+---
+
+## JIRA description template for stories:
+
+<example>
+As an x, I want x, so that x.
+
+**Acceptance Criteria**
+
+- item 1
+- item 2
+
+**Technical Details**
+
+- item 1
+- item 2
+
+**Testing Notes**
+
+- item 1
+- item 2
+
+**Out of Scope**
+
+- item 1
+- item 2
+
+**Dependencies**
+
+- item 1
+- item 2
+
+**Open Questions?**
+
+- item 1
+- item 2
+</example>
+
+## Jira Configuration
+
+* Our team is called {your board name}
+* Our board ID is {your board id}
+* Do not show or list stories and tickets that are done, unless specifically requested
+* When creating a new story, don't set the priority - the default will be used
