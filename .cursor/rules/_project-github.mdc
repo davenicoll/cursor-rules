@@ -1,0 +1,62 @@
+---
+description: ALWAYS READ THIS to obtain GitHub information
+globs:
+alwaysApply: true
+---
+
+## GitHub pull request template
+
+<example>
+### JIRA <!-- Link to the related JIRA ticket -->
+
+https://snsc-team.atlassian.net/browse/
+
+### Description
+
+Provide a concise summary of the changes introduced in this PR:
+
+- Implemented XYZ feature
+- Refactored ABC module
+- Fixed bug related to DEF
+
+### Deployed Feature Branch
+
+Link to the deployed feature branch for testing
+
+### Additional Context
+
+Add any other context or information that reviewers might need
+
+### How to test
+
+Manual steps to verify changes
+
+- Run `npm install` (if dependencies changed)
+- Run `npm start` to start application
+- Navigate to `/some-route` and verify XYZ works as expected, or hit endpoint with (included payload here)
+- Run unit tests with `npm test`
+
+### Screenshots <!-- (if applicable) -->
+
+Add relevant UI screenshots, logs or API response examples
+
+### PR Type
+
+- [ ] Feature
+- [ ] Bugfix
+- [ ] Refactor
+- [ ] Documentation
+- [ ] Other (please describe):
+
+### Deployment notes
+
+- [ ] Requires database migration
+- [ ] Requires environment variable changes
+
+### Checklist
+
+- [ ] PR title follows [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- [ ] Relevant unit tests are added
+- [ ] Documentation has been updated
+
+</example>
