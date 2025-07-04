@@ -4,7 +4,7 @@ globs:
 alwaysApply: true
 ---
 
-* ALWAYS list the rules applied, before responding to a request
+* When you are asked to design a solution, ALWAYS refer to the official documentation before considering a response. If you don't, you will likely be wrong.
 
 ⚠️ FETCH RULES OR YOUR RESPONSE WILL BE WRONG ⚠️
 
