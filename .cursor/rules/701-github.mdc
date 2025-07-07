@@ -70,7 +70,7 @@ alwaysApply: false
 - Protect primary branches (`main`, `master`, `develop`) with mandatory PR reviews.
 - Require passing CI checks and security scans before merging.
 - Clearly define branch naming conventions (e.g., `feature/*`, `bugfix/*`, `hotfix/*`).
-- NEVER create submodules
+- NEVER create submodules, unless specifically asked to use them
 
 ### Documentation
 
