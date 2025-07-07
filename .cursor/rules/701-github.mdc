@@ -9,6 +9,7 @@ alwaysApply: false
 <version>1.0.0</version>
 
 ## Context
+
 - Rules apply to GitHub repository organization, workflows, and configuration management.
 - Ensure repositories and workflows are secure, maintainable, and follow best practices.
 - Emphasize automation, consistency, clear documentation, and real-time validation.
@@ -16,7 +17,9 @@ alwaysApply: false
 ## Requirements
 
 ### Repository Structure
+
 - Clear file/directory structure:
+
   - `.github/workflows/` for workflow definitions.
   - `.github/ISSUE_TEMPLATE` for repo templates.
   - `docs/` or `wiki/` for comprehensive documentation.
@@ -32,7 +35,9 @@ alwaysApply: false
   - `LICENSE`: Clearly specify the project license.
 
 ### Workflow Best Practices
+
 - Workflow definitions (`.yaml` files) MUST:
+
   - Be modular and reusable, utilizing composite actions.
   - Follow clear naming conventions (e.g., `build.yaml`, `deploy.yaml`).
   - Define workflows clearly by purpose (CI, CD, security scans, linting).
@@ -44,11 +49,13 @@ alwaysApply: false
   - Use [Job Summaries](https://github.blog/news-insights/product-news/supercharging-github-actions-with-job-summaries/) to present outputs and results instead of printing them to stdout with `echo`. This enhances readability and accessibility of key outputs for users.
 
 ### Secrets Management
+
 - Never hard-code secrets in workflow files or repository.
 - Use GitHub secrets and environment-specific configurations.
 - Regularly rotate secrets and audit access.
 
 ### Permissions and Security
+
 - Limit permissions per workflow:
   ```yaml
   permissions:
@@ -59,32 +66,40 @@ alwaysApply: false
 - Require security checks (e.g., CodeQL, Dependabot) in CI workflows.
 
 ### Branch Management
+
 - Protect primary branches (`main`, `master`, `develop`) with mandatory PR reviews.
 - Require passing CI checks and security scans before merging.
 - Clearly define branch naming conventions (e.g., `feature/*`, `bugfix/*`, `hotfix/*`).
+- NEVER create submodules
 
 ### Documentation
+
 - Comprehensive, automatically-generated documentation (e.g., `mkdocs`, `docusaurus`).
 - Document API endpoints clearly and keep docs synchronized with releases.
 - Provide example workflow usage and detailed descriptions.
 
 ### Issue and PR Management
+
 - Use issue templates to guide detailed bug reports and feature requests.
 - PR templates enforce consistent, informative pull requests.
 - Regularly triage and label issues and PRs clearly.
 
 ### Code Review
+
 - Enforce at least one mandatory reviewer per PR using CODEOWNERS.
 - Encourage clear and constructive feedback.
 - Integrate automated checks (lint, format, security scans) within PR checks.
 
 ### Automation
+
 - Automate dependency updates (Dependabot) and vulnerability checks.
 - Automate releases through tags/releases workflow.
 - Enforce consistent linting, testing, and formatting checks in CI.
 
 ### Use RuleSets
+
 - Enforce branch naming policy across an organization with a rule like this (replace JIRA with your jira project code):
+
 ```
 "rules": [
     {
@@ -97,7 +112,9 @@ alwaysApply: false
       }
     }
 ```
+
 - Enforce org-wide commits with company email using a rule like this (replace company-domain.com with your company's domain):
+
 ```
     "rules": [
       {
@@ -111,7 +128,9 @@ alwaysApply: false
       }
     ],
 ```
+
 - Enforce org-wide linting with this:
+
 ```
   "rules": [
     {
