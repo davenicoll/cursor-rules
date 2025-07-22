@@ -1,5 +1,5 @@
 ---
-description: APPLY commit message conventions WHEN creating commits TO ensure clear and consistent version history
+description: APPLY commit message conventions WHEN creating commits OR generating commit messages TO ensure clear and consistent version history
 globs: 
 alwaysApply: true
 ---
