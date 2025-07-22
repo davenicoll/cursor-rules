@@ -22,6 +22,7 @@ alwaysApply: true
 - No double negatives.
 - Prioritize readable variable names, even if longer.
 - Simplify loops using `map()`, `filter()`, or `reduce()`.
+- ALWAYS trim trailing and leading whitespace from all files before saving changes.
 
 ### Function Design
 - Keep functions small and focused on a single responsibility
