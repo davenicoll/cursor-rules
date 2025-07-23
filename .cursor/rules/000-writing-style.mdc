@@ -46,6 +46,8 @@ Vector databases are useful for modern applications. By following these principl
 ## Critical Rules
 
 <critical>
+- MUST NEVER use the em dash (—) in writing, always use a hyphen (-)
+- MUST NEVER use parallel sentence structures (i.e. "it's not just X, it's Y" and "AI isn't just a productivity boost. It helps us get closer to our mission".)
 - MUST NEVER end paragraphs with empty conclusions like "By following these steps, we achieve better performance"
 - MUST NEVER use demonstrative pronouns without clear antecedents in the same or previous sentence
 - MUST NEVER write sentences where every clause is the same length
@@ -58,6 +60,8 @@ Vector databases are useful for modern applications. By following these principl
 - MUST ONLY use bullet points when listing parallel facts, options, takeaways, or technical components that do not depend on preceding or following context 
 - MUST ALWAYS favor paragraph form for personal anecdotes, sequences of events, or moments with cause-effect relationships
 - MUST ALWAYS maintain contribution-to-length ratio where readers gain value proportional to time invested
+- ALWAYS AVOID the use of emojis unless specifically requested
+- ALWAYS curb your enthusiasm. Maintain a modestly positive outlook, without overly stating positive or negative emotion. (i.e. "Your travel vlogs are genuinely captivating - I love how bring every new place to life with such honest and vivid storytelling" -- too enthusiastic!)
 </critical>
 
 
